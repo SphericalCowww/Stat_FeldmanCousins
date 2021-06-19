@@ -1,0 +1,193 @@
+\documentclass{article}
+\usepackage{geometry}        
+\geometry{letterpaper}    
+\usepackage[parfill]{parskip}  
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\usepackage{amsmath}
+\pagestyle{empty}
+ 
+\begin{document}
+\baselineskip 2.7ex
+\parskip 3.5ex
+
+
+%Space/Indentation
+\newcommand{\noi}{\noindent}
+\newcommand{\vnu}{\vspace*{-1mm}}
+\newcommand{\vnd}{\vspace*{-2mm}}
+\newcommand{\vnt}{\vspace*{-3mm}}
+\newcommand{\vnq}{\vspace*{-4mm}}
+\newcommand{\vnc}{\vspace*{-5mm}}
+\newcommand{\vu}{\vspace*{1mm}}
+\newcommand{\vd}{\vspace*{2mm}}
+\newcommand{\vt}{\vspace*{3mm}}
+%\newcommand{\vq}{\vspace*{4mm}}
+\newcommand{\vc}{\vspace*{5mm}}
+\newcommand{\hs}{\hspace*{5mm}}
+
+%Equations/Entries
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\bequo}{\begin{quotation}}
+\newcommand{\beqa}{\begin{eqnarray}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\equo}{\end{quotation}}
+\newcommand{\eeqa}{\end{eqnarray}}
+\newcommand{\non}{\nonumber}
+\newcommand{\mx}{\mbox}
+\newcommand{\mxf}[1]{\mbox{\footnotesize{#1}}}
+\newcommand{\lb}{\label}
+\newcommand{\fr}[1]{(\ref{#1})}
+\newtheorem{entry}{}[section]
+\newcommand{\bent}[1]{\vspace*{-2cm}\hspace*{-1cm}\begin{entry}\lb{e{#1}}\rm}
+\newcommand{\eent}{\end{entry}}
+\newcommand{\fre}[1]{{\bf\ref{e{#1}}}}
+\newcommand{\Emark}{$\sqcap\hspace{-2.7mm}\sqcup$}
+\newcommand{\sEmark}{{\fns $\sqcap\hspace{-2.3mm}\sqcup$}}
+\newcommand{\fn}{\footnote}
+
+
+%Greek Letters
+\renewcommand{\a}{\alpha}
+\renewcommand{\b}{\beta}
+\newcommand{\g}{\gamma}
+\newcommand{\G}{\Gamma}
+\renewcommand{\d}{\delta}
+\renewcommand{\th}{\theta}
+\newcommand{\Th}{\Theta}
+\newcommand{\D}{\Delta}
+\newcommand{\e}{\varepsilon}
+\newcommand{\s}{\sigma}
+\renewcommand{\S}{\Sigma}
+\newcommand{\w}{\omega}
+\newcommand{\W}{\Omega}
+\newcommand{\al}{\alpha}
+\newcommand{\bet}{\beta}
+\newcommand{\gam}{\gamma}
+\newcommand{\lam}{\lambda}
+\newcommand{\Lam}{\Lambda}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\ichi}\sichi
+\renewcommand{\ni}{\sni}
+\newcommand{\sichi}{{\mbox{{\footnotesize I}}}}
+\newcommand{\sni}{{\mbox{{\footnotesize II}}}}
+
+%Letter Style
+%\renewcommand{\vec}{\bm}
+\newcommand{\svec}[1]{\mbox{{\footnotesize $\bm{#1}$}}}
+\newcommand{\bm}[1]{\mbox{\boldmath $#1$}}
+\newcommand{\sbm}[1]{\small{\mbox{\boldmath $#1$}}}
+\newcommand{\fns}{\footnotesize}
+\newcommand{\ol}{\overline}
+\newcommand{\ul}{\underline}
+\newcommand{\vr}{\bm{r}}
+\newcommand{\vq}{\bm{q}}
+\newcommand{\vk}{\bm{k}}
+\newcommand{\vx}{\bm{x}}
+\newcommand{\vy}{\bm{y}}
+
+%Arrows
+\newcommand{\see}{$\rightarrow$}
+\newcommand{\react}{$\longrightarrow$}
+\newcommand{\map}{\rightarrow}
+\newcommand{\pam}{\leftarrow}
+\newcommand{\maps}{\rightarrow}
+\newcommand{\imply}{\Rightarrow}
+\newcommand{\Lrar}{\Leftrightarrow}
+\newcommand{\rar}{\rightarrow}
+\newcommand{\irrev}{\prec\prec}
+\newcommand{\go}{\prec}
+\newcommand{\adeq}{\stackrel{A}\sim}
+\newcommand{\theq}{\stackrel{T}\sim}
+
+%Derivatives
+\newcommand{\pder}[2]{\frac{\partial {#1}}{\partial {#2}}}
+\newcommand{\pdert}[2]{\frac{\partial^2 {#1}}{\partial {#2}^2}}
+\newcommand{\fder}[2]{\frac{\delta {#1}}{\delta {#2}}}
+\newcommand{\PDD}[3]{\left.\frac{\partial^{2}{#1}}{\partial{#2}^{2}}\right|_{#3}}
+\newcommand{\PD}[3]{\left.\frac{\partial{#1}}{\partial{#2}}\right|_{#3}}
+\newcommand{\der}[2]{\frac{d {#1}}{d {#2}}}
+
+%Parentheses
+\newcommand{\la}{\langle}
+\newcommand{\ra}{\rangle}
+\newcommand{\bra}[1]{\langle{#1}|}
+\newcommand{\ket}[1]{|{#1}\rangle}
+\newcommand{\FB}{${\bm \la\hspace{-.7mm}\la}$}  %footnote title start
+\newcommand{\FE}{${\bm \ra\hspace{-.7mm}\ra}$}
+\renewcommand{\v}{\vspace*{2mm}}
+%logic
+%\renewcommand{\or}{\vee} %this interferes with beqa/eeqa
+\renewcommand{\and}{\wedge}
+
+\renewcommand{\deg}{^\circ}
+\newcommand{\com}{{\bf [C] }} 
+\newcommand{\cend}{\Emark\[\]\vspace*{-1. cm}}
+\newcommand{\x}{\times}
+
+%tabbing
+\newcommand{\MyTabs}{ \hspace*{25.mm} \= ... \kill }
+%%%%%%%%
+
+Note: $\mu$ is the observed expectation value, and $\sigma$ is the standard error of $\mu$.\\
+For $\mu > 0$ condition:
+\[
+\begin{aligned}
+	&P(x \ge 0|\mu_{opt}) = &&\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu_{opt})^2}{2\sigma^2}} = P(x \ge 0|\mu_{opt} = x) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-x)^2}{2\sigma^2}}&& = \frac{1}{\sigma\sqrt{2\pi}}\\
+	&P(x < 0|\mu_{opt}) = &&\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu_{opt})^2}{2\sigma^2}} = P(x < 0|\mu_{opt} = 0) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-0)^2}{2\sigma^2}}&& = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{x^2}{2\sigma^2}}\\
+	&R(x \ge 0) =  &&P(x \ge 0|\mu)/P(x \ge 0|\mu_{opt}) =  \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}/\frac{1}{\sigma\sqrt{2\pi}}&& = e^{-\frac{(x-\mu)^2}{2\sigma^2}}\\
+	&R(x < 0) =  &&P(x < 0|\mu)/P(x < 0|\mu_{opt}) =  \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}/\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{x^2}{2\sigma^2}}&& = e^{\frac{2x\mu - \mu^2}{2\sigma^2}}\\
+\end{aligned}
+\]
+\[
+	-x_u^2 + 2x_u\mu - \mu^2 = 2x_l\mu - \mu^2
+\]
+\[
+	\Rightarrow -x_u^2 + 2x_u\mu  = 2x_l\mu
+\]
+\[
+	\Rightarrow x_l = x_u - \frac{x_u^2}{2\mu}
+\]
+
+For $\mu < b$ condition:
+\[
+\begin{aligned}
+	&P(x \le b|\mu_{opt}) = &&P(x \le b|\mu_{opt} = x) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-x)^2}{2\sigma^2}}&& = \frac{1}{\sigma\sqrt{2\pi}}\\
+	&P(x > b|\mu_{opt}) = &&P(x > b|\mu_{opt} = b)&& = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-b)^2}{2\sigma^2}}\\
+	&R(x \le b) =  &&P(x \le b|\mu)/P(x \ge 0|\mu_{opt}) =  \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}/\frac{1}{\sigma\sqrt{2\pi}}&& = e^{-\frac{(x-\mu)^2}{2\sigma^2}}\\
+	&R(x > b) =  &&P(x > b|\mu)/P(x < 0|\mu_{opt}) =  \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}/\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-b)^2}{2\sigma^2}}&& = e^{\frac{(2x-(\mu+b))(\mu-b)}{2\sigma^2}}\\
+\end{aligned}
+\]
+\[
+	-x_u^2 + 2x_u\mu - \mu^2 = 2x_l(\mu-b) - \mu^2 + b^2
+\]
+\[
+	\Rightarrow -x_u^2 + 2x_u\mu -b^2 = 2x_l(\mu-b)
+\]
+\[
+	\Rightarrow x_l = \frac{2x_u\mu - x_u^2 - b^2}{2(\mu-b)}
+\]
+
+ \end{document} 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
