@@ -14,7 +14,7 @@ The code runs on python3 with additional packages:
     python3 FeldmanCousinsGaus.py
 The code outputs the following image:
 
-<img src="https://github.com/Rabbitybunny/Stat_FeldmanCousins/blob/master/gausFeldmanCousins.png" width="630" height="490">
+<img src="https://github.com/SphericalCowww/Stat_FeldmanCousins/blob/master/gausFeldmanCousins.png" width="630" height="490">
 
 - Top-left: blue distribution are the sample drawn from the red Gaussian curve. The top-left coner gives the confidence interval using the point estimate (Pt Est) and maximum likelihood method (Max Like). We can see that these confidence intervals does not respect the constraints (&mu; > 0.0) and (&sigma; < 1.0). The point estimate confident interval for &sigma; is shown to be not availabe; it's possible to do, but very difficult. The maximum likelihood confidence intervals are the ones passed down to the Feldman Cousin analysis.
 - Bottom-left: the Feldman Cousin confidence belt of parameter &mu;. We can see that although the estimate gives &mu; = -0.16 (shown by the green vertical line) that is outside the bound purely out of statistical reason, the Feldman Cousin method gives a one-sided confidence interval of [0.0, 0.14]. This updated interval not only satisfies the constraint of (&mu; > 0.0), but it also contains the true value of &mu; = 0.1.
