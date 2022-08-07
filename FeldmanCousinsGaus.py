@@ -138,8 +138,7 @@ def main():
     valSig = np.sqrt(np.var(dataPDF));
     errSig = -1;
 #maximum likelihood 
-    if verbosity >= 1:
-        print("Processing maximum likelihood...");
+    if verbosity >= 1: print("Processing maximum likelihood...");
     optInitVals = [valMu, valSig];
     negMaxLL = negLogLikelihood(dataPDF);
     optResult = optimize.minimize(negMaxLL, optInitVals);
@@ -148,6 +147,7 @@ def main():
     maxErrMu = maxLikeSig*np.sqrt(1.0/dataN);
     maxErrSig = maxLikeSig*np.sqrt(1.0/(2.0*dataN));
 #Feldman&Cousins with condition mu > 0
+    if verbosity >= 1: print("Processing Feldman&Cousins for mu...");
     muSpan         = [];
     muConfIntUList = [];
     muConfIntLList = [];
@@ -183,6 +183,7 @@ def main():
     if muConfInt[1] < 1.1*FCstepSize:
         muConfInt[1] = 0.0;
 #Feldman&Cousins with condition sigma < 1.0
+    if verbosity >= 1: print("Processing Feldman&Cousins for sigma...");
     sigSpan         = [];
     sigConfIntUList = [];
     sigConfIntLList = [];
