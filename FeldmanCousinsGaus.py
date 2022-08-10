@@ -19,7 +19,7 @@ warnings.filterwarnings("ignore");
 
 #NOTE: to estimate the number of counts, error bars on estimating the amplitude
 #      won't be Gaussian when count is low; need to use Poisson, which on its
-#      own provides the standard error (see 9711021.pdf). However, Poissin error 
+#      own provides the standard error (see Ref.1). However, Poissin error 
 #      would neglect the shape of the signal pdf if known, which would then 
 #      require the assumption on the number of counts of the noise events
 
@@ -111,7 +111,7 @@ def main():
     dataSig = 0.8;
     dataN   = 30;
 
-    alpha = 0.95;
+    alpha = 0.95;               #for one-sided confidence interval
     FCstepSize = 0.01;
     
     muRange     = [0.0, 2.0];   #range for FC span
