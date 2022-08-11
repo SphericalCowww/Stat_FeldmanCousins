@@ -99,9 +99,11 @@ def main():
  
     labelStr  = "est = " + scientificStr(yEst)
     labelStr += "+" + scientificStr(yConfInt[1]-yEst)
-    labelStr += "-" + scientificStr(yEst-yConfInt[0])
+    labelStr += "-" + scientificStr(yEst-yConfInt[0]) + "\n"
+    labelStr += "inv = [" + scientificStr(yConfInt[0]) + ", "
+    labelStr +=             scientificStr(yConfInt[1]) + "]"
     font = {"family": "serif", "color": "green", "weight": "bold", "size": 18}
-    ax0.text(xEst, yRange[1] - 0.04*(yRange[1]-yRange[0]), labelStr, fontdict=font)
+    ax0.text(xEst, yRange[1] - 0.045*(yRange[1]-yRange[0]), labelStr,fontdict=font)
     if verbosity >= 1: 
         print("F&C CI: est = "+str(yEst)+"+"+str(yConfInt[1]-yEst)+\
                                          "-"+str(yEst-yConfInt[0]))
