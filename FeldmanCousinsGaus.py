@@ -111,7 +111,7 @@ def main():
     dataSig = 0.8;
     dataN   = 30;
 
-    alpha = 0.95;               #for one-sided confidence interval
+    alpha = 0.95;               #two-sided significant prob
     FCstepSize = 0.01;
     
     muRange     = [0.0, 2.0];   #range for FC span

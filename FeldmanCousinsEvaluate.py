@@ -35,7 +35,7 @@ def main():
     elif boundType in ["u", "U", "upper", "Upper"]: yRange = [val-5*err, boundEdge]
     xRange = [yRange[0]-0.5*(yRange[1]-yRange[0]),\
               yRange[1]+0.5*(yRange[1]-yRange[0])]
-    alpha = 0.682689492137086 #1-sigma
+    alpha = 0.682689492137086 #1-sigma, two-sided significant prob
     ########################### 
     if verbosity >= 1: print("Processing Feldman&Cousins...")
     ySpan         = []
@@ -92,10 +92,8 @@ def main():
     ax0.set_aspect(1, adjustable="box")
     ax0.axvline(x=xEst, ymin=0, ymax=1, color="green")
     plotRatio = (xEst - xRange[0])/(xRange[1] - xRange[0])
-    ax0.axhline(y=yConfInt[0], xmin=0, xmax=plotRatio, color="green",\
-                linestyle=":")
-    ax0.axhline(y=yConfInt[1], xmin=0, xmax=plotRatio, color="green",\
-                linestyle=":")
+    ax0.axhline(y=yConfInt[0], xmin=0, xmax=plotRatio, color="green",linestyle=":")
+    ax0.axhline(y=yConfInt[1], xmin=0, xmax=plotRatio, color="green",linestyle=":")
  
     labelStr  = "est = " + scientificStr(yEst)
     labelStr += "+" + scientificStr(yConfInt[1]-yEst)
