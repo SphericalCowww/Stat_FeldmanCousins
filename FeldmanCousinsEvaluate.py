@@ -98,14 +98,14 @@ def main():
     labelStr  = "est = " + scientificStr(yEst)
     labelStr += "+" + scientificStr(yConfInt[1]-yEst)
     labelStr += "-" + scientificStr(yEst-yConfInt[0]) + "\n"
-    labelStr += "inv = [" + scientificStr(yConfInt[0]) + ", "
-    labelStr +=             scientificStr(yConfInt[1]) + "]"
+    labelStr += "int = [" + scientificStr(yConfInt[0], sigFig=3) + ", "
+    labelStr +=             scientificStr(yConfInt[1], sigFig=3) + "]"
     font = {"family": "serif", "color": "green", "weight": "bold", "size": 18}
     ax0.text(xEst, yRange[1] - 0.045*(yRange[1]-yRange[0]), labelStr,fontdict=font)
     if verbosity >= 1: 
         print("F&C CI: est = "+str(yEst)+"+"+str(yConfInt[1]-yEst)+\
                                          "-"+str(yEst-yConfInt[0]))
-        print("        conf inv =", yConfInt)
+        print("        conf int =", yConfInt)
         print("        stepSize = "+str(stepSize))
 #save plots
     exepath = os.path.dirname(os.path.abspath(__file__))
