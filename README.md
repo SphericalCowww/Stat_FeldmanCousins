@@ -20,11 +20,16 @@ The code outputs the following image:
 - Bottom-left: the Feldman Cousin confidence belt of parameter &mu;. We can see that although the estimate gives &mu; = -0.16 (shown by the green vertical line) that is outside the bound purely out of statistical reason, the Feldman Cousin method gives a one-sided confidence interval of [0.0, 0.14]. This updated interval not only satisfies the constraint of (&mu; > 0.0), but it also contains the true value of &mu; = 0.1.
 - Bottom-right: the Feldman Cousin confidence belt of parameter &sigma;. We can see that if the estimate, i.e. &sigma; = 0.76 is somewhat away from the bound of (&sigma; < 1.0), then the Feldman Cousin method recovers the two-side confidence interval the same as the classical one.
 
+Alternatively:
+
+    python3 FeldmanCousinsEvaluate.py
+The code outputs the 1-sigma Feldman-Cousins bound of a given mean and standard error with the constraint that the mean is greater than 0. The parameters should be adjustable within the code near the beginning.
+
 Additional note:
 - fomularFeldmanCousins.pdf provides the analysical formulas for the Feldman Cousin confidence belt for lower and upper bounds. The derivation is done on the &mu; of a Gaussian, but the idea is similar for all other parameters and distributions.
 
 
 
 References:
-- G. J. Feldman and R. D. Cousins, Phys. Rev. D 57, 3873 (1998) (<a href="https://journals.aps.org/prd/abstract/10.1103/PhysRevD.57.3873">Phy Rev D</a>, <a href="https://arxiv.org/abs/physics/9711021">arxiv</a>)
+- G. J. Feldman and R. D. Cousins, Phys. Rev. D 57, 3873 (1998) (<a href="https://journals.aps.org/prd/abstract/10.1103/PhysRevD.57.3873">Phy Rev D</a>, <a href="https://arxiv.org/abs/physics/9711021">arXiv</a>)
 - B. Cousins, Virvual Talk, Univ. of California, Los Angeles (2011) (<a href="http://www.physics.ucla.edu/~cousins/stats/cousins_bounded_gaussian_virtual_talk_12sep2011.pdf">PPT</a>)
