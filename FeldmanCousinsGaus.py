@@ -188,22 +188,26 @@ def main():
     ax2 = fig.add_subplot(gs[2])
     ax3 = fig.add_subplot(gs[3])
     #plot 0
+    xValsPlot = xVals
     gausPlotOrig         = gaussian(dataMu,        dataSig,        xVals)
-    gausPlotOrig        *= np.sum(dataHist)/np.sum(gausPlotOrig)
+    gausPlotOrig        /= np.sum(gausPlotOrig)*(xVals[1] - xVals[0])
+    gausPlotOrig        *= np.sum(dataHist)*(xValsPlot[1] - xValsPlot[0])
     gausPlotPtEst        = gaussian(valMu,         valSig,         xVals)
-    gausPlotPtEst       *= np.sum(dataHist)/np.sum(gausPlotPtEst)
+    gausPlotPtEst       /= np.sum(gausPlotPtEst)*(xVals[1] - xVals[0])
+    gausPlotPtEst       *= np.sum(dataHist)*(xValsPlot[1] - xValsPlot[0])
     gausPlotMaxLike      = gaussian(maxLikeMu,     maxLikeSig,     xVals)
-    gausPlotMaxLike     *= np.sum(dataHist)/np.sum(gausPlotMaxLike)
+    gausPlotMaxLike     /= np.sum(gausPlotMaxLike)*(xVals[1] - xVals[0])
+    gausPlotMaxLike     *= np.sum(dataHist)*(xValsPlot[1] - xValsPlot[0])
     gausPlotLeastSquare  = gaussian(leastSquareMu, leastSquareSig, xValsFit)
     gausPlotLeastSquare *= leastSquareA
     gausPlotChi2         = gaussian(leastChi2Mu,   leastChi2Sig, xValsFit)
     gausPlotChi2        *= leastChi2A
     
     ##Choose one to plot
-    xValsPlot = xValsFit
-    gausPlot = gausPlotLeastSquare
+    gausPlot = gausPlotOrig
     ##################################################################################
     
+    if len(xValsPlot) > len(gausPlot): xValsPlot = xValsFit
     ax0.plot(xVals, dataHist, color="blue", drawstyle="steps-post")
     ax0.hist(dataSamp, bins=binN, range=rangeX, histtype="step", color="black")
 
