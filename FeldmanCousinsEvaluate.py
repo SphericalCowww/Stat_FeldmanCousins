@@ -35,7 +35,8 @@ def main():
     elif boundType in ["u", "U", "upper", "Upper"]: yRange = [val-5*err, boundEdge]
     xRange = [yRange[0]-0.5*(yRange[1]-yRange[0]),\
               yRange[1]+0.5*(yRange[1]-yRange[0])]
-    alpha = 0.682689492137086 #1-sigma, two-sided significant prob
+    #gamma = 1 - alpha, where alpha is the significance level
+    gamma = 0.682689492137086 #1-sigma, two-sided confidence level
     ########################### 
     if verbosity >= 1: print("Processing Feldman&Cousins...")
     ySpan         = []
@@ -45,9 +46,9 @@ def main():
     yRangeN = int((yRange[1] - yRange[0])/stepSize) + 1
     for i in (tqdm(range(yRangeN)) if verbosity>=1 else range(yRangeN)):
         yVal = yRange[0] + i*stepSize;
-        optResult = FCopt(boundType, boundEdge, yVal, ySE, alpha)
+        optResult = FCopt(boundType, boundEdge, yVal, ySE, gamma)
         confInt1 = optResult.x
-        confInt2 = FCconfIntPartner(boundType, boundEdge, confInt1, yVal,ySE,alpha)
+        confInt2 = FCconfIntPartner(boundType, boundEdge, confInt1, yVal,ySE,gamma)
         ySpan.append(yVal)
         xConfIntUList.append(max(confInt1, confInt2))
         xConfIntLList.append(min(confInt1, confInt2))
@@ -158,7 +159,7 @@ def estFunc(boundDir, bound, parStat):  #(estFunc(x) = x) except at the boundary
     else:
         print("ERROR: estFunc: unrecognized boundDir input.");
         sys.exit(0);
-def FCconfIntPartner(boundDir, bound, confInt1, par, parErr, alpha):
+def FCconfIntPartner(boundDir, bound, confInt1, par, parErr, gamma):
     if par == bound:
         if boundDir in ["u", "U", "upper", "Upper"]:
             return 1.0/SNUMBER;
@@ -167,8 +168,8 @@ def FCconfIntPartner(boundDir, bound, confInt1, par, parErr, alpha):
         else:
             print("ERROR: FCconfIntPartner: unrecognized boundDir input.");
             sys.exit(0);
-    alphaCov = alpha + (1.0 - alpha)/2.0;
-    errBarRatio = stats.norm.ppf(alphaCov);
+    gammaCov = gamma + (1.0 - gamma)/2.0;
+    errBarRatio = stats.norm.ppf(gammaCov);
     confInt2 = 2*par*confInt1 - pow(confInt1, 2) - pow(bound, 2);
     confInt2 = confInt2/(2*(par - bound));
     if boundDir in ["u", "U", "upper", "Upper"]:
@@ -181,7 +182,7 @@ def FCconfIntPartner(boundDir, bound, confInt1, par, parErr, alpha):
         print("ERROR: FCconfIntPartner: unrecognized boundDir input.");
         sys.exit(0);
     return confInt2;
-def FCconfIntProbAlpha(boundDir, bound, confInt1, par, parErr, alpha):
+def FCconfIntProbAlpha(boundDir, bound, confInt1, par, parErr, gamma):
     if parErr <= 0:
         print("ERROR: FCconfIntProbAlpha: parErr < 0.")
         sys.exit(0);
@@ -189,11 +190,11 @@ def FCconfIntProbAlpha(boundDir, bound, confInt1, par, parErr, alpha):
        (boundDir in ["l", "L", "lower", "Lower"]) and (par < bound):
         print("ERROR: FCconfIntProbAlpha: bound condition violated.")
         sys.exit(0);
-    confInt2 = FCconfIntPartner(boundDir, bound, confInt1, par, parErr, alpha);
+    confInt2 = FCconfIntPartner(boundDir, bound, confInt1, par, parErr, gamma);
     prob = abs(stats.norm.cdf(confInt1, loc=par, scale=parErr)\
               -stats.norm.cdf(confInt2, loc=par, scale=parErr));
     return prob;
-def FCoptFunc(boundDir, bound, par, parErr, alpha):
+def FCoptFunc(boundDir, bound, par, parErr, gamma):
     return lambda confInt1 : \
         abs(FCconfIntProbAlpha(boundDir, bound, confInt1, par, parErr, alpha)\
            -alpha);
