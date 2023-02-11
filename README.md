@@ -25,6 +25,10 @@ Alternatively:
     python3 FeldmanCousinsEvaluate.py
 The code outputs the 1-sigma Feldman-Cousins bound of a given mean and standard error with the constraint that the mean is greater than 0. The parameters should be adjustable within the code near the beginning.
 
+As an example, the code can outputs the following image, which should be equivalent to Fig.10 from Ref.1:
+
+<img src="https://github.com/SphericalCowww/Stat_FeldmanCousins/blob/master/gausFeldmanCousinsEvaluate_Display.png" width="400" height="400">
+
 Additional note:
 - fomularFeldmanCousins.pdf provides the analysical formulas for the Feldman Cousin confidence belt for lower and upper bounds. The derivation is done on the &mu; of a Gaussian, but the idea is similar for all other parameters and distributions.
 
