@@ -1,18 +1,12 @@
-import sys, math
-import re
-import time
-import os
-
+import os, sys, pathlib, time, re, glob, math, copy
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import matplotlib.gridspec as gridspec
-from copy import deepcopy
 from scipy import optimize
 from scipy import stats
 from tqdm import tqdm
-
 import warnings
 warnings.filterwarnings("ignore");
 
@@ -22,7 +16,7 @@ warnings.filterwarnings("ignore");
 #      own provides the standard error (see Ref.1). However, Poissin error 
 #      would neglect the shape of the signal pdf if known, which would then 
 #      require the assumption on the number of counts of the noise events
-#######################################################################################
+#################################################################################################################
 def main():
     verbosity = 2
     binN = 200
@@ -36,7 +30,6 @@ def main():
     fitRange = [-2.0, 2.0]      #for least square/chi2 fit
 
     alpha = 0.05                #two-sided significant level
-    gamma = 1.0 - alpha         #two-sided confidence level
     FCstepSize = 0.01
     
     muRange     = [0.0, 2.0]    #range for FC span
@@ -120,9 +113,9 @@ def main():
     for i in (tqdm(range(muRangeN)) if verbosity>=1 else range(muRangeN)):
         mu      = muRange[0] + i*FCstepSize
         muErr   = muSE
-        optResult = FCopt(muBoundDir, muBound, mu, muErr, gamma)
+        optResult = FCopt(muBoundDir, muBound, mu, muErr, alpha)
         confInt1 = optResult.x
-        confInt2 = FCconfIntPartner(muBoundDir, muBound, confInt1, mu, muErr, gamma)
+        confInt2 = FCconfIntPartner(muBoundDir, muBound, confInt1, mu, muErr, alpha)
         muSpan.append(mu)
         muConfIntUList.append(max(confInt1, confInt2))
         muConfIntLList.append(min(confInt1, confInt2))
@@ -151,9 +144,9 @@ def main():
     for i in (tqdm(range(sigRangeN)) if verbosity>=1 else range(sigRangeN)):
         sig    = sigRange[0] + i*FCstepSize
         sigErr = sigSE
-        optResult = FCopt(sigBoundDir, sigBound, sig, sigErr, gamma)
+        optResult = FCopt(sigBoundDir, sigBound, sig, sigErr, alpha)
         confInt1 = optResult.x
-        confInt2 = FCconfIntPartner(sigBoundDir, sigBound, confInt1, sig, sigErr,gamma)
+        confInt2 = FCconfIntPartner(sigBoundDir, sigBound, confInt1, sig, sigErr,alpha)
         sigSpan.append(sig)
         sigConfIntUList.append(max(confInt1, confInt2))
         sigConfIntLList.append(min(confInt1, confInt2))
@@ -175,8 +168,8 @@ def main():
     if sigConfInt[0] < 1.1*FCstepSize: sigConfInt[0] = 0.0
     if sigConfInt[1] < 1.1*FCstepSize: sigConfInt[1] = 0.0
 #confidence level to sigma error convertion
-    gammaCov = gamma + (1.0 - gamma)/2.0
-    errBarRatio = stats.norm.ppf(gammaCov)
+    alphaCov = (1.0 - alpha) + alpha/2.0
+    errBarRatio = stats.norm.ppf(alphaCov)
     errMu       = errBarRatio*errMu
     if errSig > 0: errSig = errBarRatio*errSig
     maxErrMu   = errBarRatio*maxErrMu
@@ -206,7 +199,7 @@ def main():
     
     ##Choose one to plot
     gausPlot = gausPlotOrig
-    ##################################################################################
+    #############################################################################################################
     
     if len(xValsPlot) > len(gausPlot): xValsPlot = xValsFit
     ax0.plot(xVals, dataHist, color="blue", drawstyle="steps-post")
@@ -274,10 +267,8 @@ def main():
     ax2.set_aspect(1, adjustable="box")
     ax2.axvline(x=muHat, ymin=0, ymax=1, color="green")
     muHatRatio = (muHat - muStatRange[0])/(muStatRange[1] - muStatRange[0])
-    ax2.axhline(y=(muEst-muConfInt[0]), xmin=0, xmax=muHatRatio, color="green",\
-                linestyle=":")
-    ax2.axhline(y=(muEst+muConfInt[1]), xmin=0, xmax=muHatRatio, color="green",\
-                linestyle=":")
+    ax2.axhline(y=(muEst-muConfInt[0]), xmin=0, xmax=muHatRatio, color="green", linestyle=":")
+    ax2.axhline(y=(muEst+muConfInt[1]), xmin=0, xmax=muHatRatio, color="green", linestyle=":")
  
     font = {"family": "serif", "color": "green", "weight": "bold", "size": 18}
     digit2  = -math.floor(math.log10(max(muConfInt))) + 1
@@ -333,10 +324,8 @@ def main():
         print("    sig = " + str(leastChi2Sig) + " +/- " + str(chi2ErrSig))
         print("    A   = " + str(leastChi2A)   + " +/- " + str(chi2ErrA))
         print("F&C CI:")
-        print("    mu  = " + str(muEst)  + \
-              " + " + str(muConfInt[1])  + " - " + str(muConfInt[0]))
-        print("    sig = " + str(sigEst) + \
-              " + " + str(sigConfInt[1]) + " - " + str(sigConfInt[0]))
+        print("    mu  = " + str(muEst)  + " + " + str(muConfInt[1])  + " - " + str(muConfInt[0]))
+        print("    sig = " + str(sigEst) + " + " + str(sigConfInt[1]) + " - " + str(sigConfInt[0]))
 #save plots
     exepath = os.path.dirname(os.path.abspath(__file__))
     filenameFig = exepath + "/gausFeldmanCousins.png"
@@ -344,41 +333,38 @@ def main():
     plt.savefig(filenameFig)
     if verbosity >= 1: print("Creating the following files:\n" + filenameFig)
 
-#######################################################################################
+#################################################################################################################
 TOLERANCE = pow(10.0, -10)
 SNUMBER   = pow(10.0, -124)
 def gaussian(mu, sig, x):
     X = np.array(x)
-    vals = np.exp(-np.power(X-mu,2.0)/(2.0*np.power(sig,2.0)))\
-         *(1.0/(sig*np.sqrt(2.0*np.pi)))
+    vals = np.exp(-np.power(X-mu,2.0)/(2.0*np.power(sig,2.0))) * (1.0/(sig*np.sqrt(2.0*np.pi)))
     vals[vals < SNUMBER] = SNUMBER
     return vals
 def squareResGaus(x, y):
     return lambda par : np.sum(np.square(y - par[0]*gaussian(par[1], par[2], x)))
 def chiSquareGaus(x, y, yerr):
-    if np.sum(yerr[yerr <= 0]) > 0: 
-        raise ValueError("chiSquareGaus(): non-positive yerr values") 
+    if np.sum(yerr[yerr <= 0]) > 0: raise ValueError("chiSquareGaus(): non-positive yerr values") 
     return lambda par : np.sum(np.square((y - par[0]*gaussian(par[1], par[2],x))/yerr))
 def logGaus(mu, sig, x):
     X = np.array(x)
-    vals = -np.log(sig*np.sqrt(2.0*np.pi))\
-           -np.power(X-mu,2.0)/(2.0*np.power(sig,2.0))
+    vals = -np.log(sig*np.sqrt(2.0*np.pi)) - np.power(X-mu,2.0)/(2.0*np.power(sig,2.0))
     LL = sum(vals)
     return LL
 def negLogLikelihood(x):
     return lambda par : -1.0*logGaus(par[0], par[1], x)
 
 def estFunc(boundDir, bound, parStat):
-    if boundDir in ["u", "U", "upper", "Upper"]:   return min(bound, parStat)
+    if   boundDir in ["u", "U", "upper", "Upper"]: return min(bound, parStat)
     elif boundDir in ["l", "L", "lower", "Lower"]: return max(bound, parStat)
     else: raise ValueError("estFunc(): unrecognized boundDir input")
-def FCconfIntPartner(boundDir, bound, confInt1, par, parErr, gamma):
+def FCconfIntPartner(boundDir, bound, confInt1, par, parErr, alpha):
     if par == bound:
-        if boundDir in ["u", "U", "upper", "Upper"]:   return 1.0/SNUMBER
+        if   boundDir in ["u", "U", "upper", "Upper"]: return 1.0/SNUMBER
         elif boundDir in ["l", "L", "lower", "Lower"]: return -1.0/SNUMBER
         else: raise ValueError("FCconfIntPartner(): unrecognized boundDir input")
-    gammaCov = gamma + (1.0 - gamma)/2.0
-    errBarRatio = stats.norm.ppf(gammaCov)
+    alphaCov = (1.0 - alpha) + alpha/2.0
+    errBarRatio = stats.norm.ppf(alphaCov)
     confInt2 = 2*par*confInt1 - pow(confInt1, 2) - pow(bound, 2)
     confInt2 = confInt2/(2*(par - bound))
     if boundDir in ["u", "U", "upper", "Upper"]:
@@ -387,32 +373,29 @@ def FCconfIntPartner(boundDir, bound, confInt1, par, parErr, gamma):
         if par - errBarRatio*parErr >= bound: confInt2 = par - errBarRatio*parErr
     else: raise ValueError("FCconfIntPartner(): unrecognized boundDir input")
     return confInt2;
-def FCconfIntProbAlpha(boundDir, bound, confInt1, par, parErr, gamma):
+def FCconfIntProbAlpha(boundDir, bound, confInt1, par, parErr, alpha):
     if parErr <= 0: raise ValueError("FCconfIntProbAlpha(): parErr < 0")
     if (boundDir in ["u", "U", "upper", "Upper"]) and (par > bound) or\
        (boundDir in ["l", "L", "lower", "Lower"]) and (par < bound):
        raise ValueError("FCconfIntProbAlpha(): bound condition violated")
-    confInt2 = FCconfIntPartner(boundDir, bound, confInt1, par, parErr, gamma)
-    prob = abs(stats.norm.cdf(confInt1, loc=par, scale=parErr)\
-              -stats.norm.cdf(confInt2, loc=par, scale=parErr))
+    confInt2 = FCconfIntPartner(boundDir, bound, confInt1, par, parErr, alpha)
+    prob = abs(stats.norm.cdf(confInt1, loc=par, scale=parErr) - stats.norm.cdf(confInt2, loc=par, scale=parErr))
     return prob
-def FCoptFunc(boundDir, bound, par, parErr, gamma):
-    return lambda confInt1 : \
-        abs(FCconfIntProbAlpha(boundDir, bound, confInt1, par, parErr, gamma) - gamma)
-def FCopt(boundDir, bound, par, parErr, gamma):
+def FCoptFunc(boundDir, bound, par, parErr, alpha):
+    return lambda confInt1 : abs(FCconfIntProbAlpha(boundDir, bound, confInt1, par, parErr, alpha) - (1.0-alpha))
+def FCopt(boundDir, bound, par, parErr, alpha):
     optBound = (0.0, 0.0)
-    if boundDir in ["u", "U", "upper", "Upper"]:   optBound = (par-10.0*parErr, par)
+    if   boundDir in ["u", "U", "upper", "Upper"]: optBound = (par-10.0*parErr, par)
     elif boundDir in ["l", "L", "lower", "Lower"]: optBound = (par, par+10.0*parErr)
     else: ValueError("FCopt(): unrecognized boundDir input")
-    FCconfIntProb = FCoptFunc(boundDir, bound, par, parErr, gamma) 
-    return optimize.minimize_scalar(FCconfIntProb, tol=TOLERANCE,\
-                                    method="bounded", bounds=optBound)
+    FCconfIntProb = FCoptFunc(boundDir, bound, par, parErr, alpha) 
+    return optimize.minimize_scalar(FCconfIntProb, tol=TOLERANCE, method="bounded", bounds=optBound)
 
-#######################################################################################
+#################################################################################################################
 if __name__ == "__main__":
-    print("\n####################################################################Head")
+    print("\n##############################################################################################Head")
     main()
-    print("######################################################################Tail")
+    print("################################################################################################Tail")
 
 
 
