@@ -354,9 +354,9 @@ def logGaus(mu, sig, x):
 def negLogLikelihood(x):
     return lambda par : -1.0*logGaus(par[0], par[1], x)
 
-def estFunc(boundDir, bound, parStat):
-    if   boundDir in ["u", "U", "upper", "Upper"]: return min(bound, parStat)
-    elif boundDir in ["l", "L", "lower", "Lower"]: return max(bound, parStat)
+def estFunc(boundDir, bound, parSpan):
+    if   boundDir in ["u", "U", "upper", "Upper"]: return min(bound, parSpan)
+    elif boundDir in ["l", "L", "lower", "Lower"]: return max(bound, parSpan)
     else: raise ValueError("estFunc(): unrecognized boundDir input")
 def FCconfIntPartner(boundDir, bound, confInt1, par, parErr, alpha):
     if par == bound:
@@ -372,7 +372,7 @@ def FCconfIntPartner(boundDir, bound, confInt1, par, parErr, alpha):
     elif boundDir in ["l", "L", "lower", "Lower"]:
         if par - errBarRatio*parErr >= bound: confInt2 = par - errBarRatio*parErr
     else: raise ValueError("FCconfIntPartner(): unrecognized boundDir input")
-    return confInt2;
+    return confInt2
 def FCconfIntProbAlpha(boundDir, bound, confInt1, par, parErr, alpha):
     if parErr <= 0: raise ValueError("FCconfIntProbAlpha(): parErr < 0")
     if (boundDir in ["u", "U", "upper", "Upper"]) and (par > bound) or\

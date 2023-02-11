@@ -135,10 +135,10 @@ Note: $\mu$ is the observed expectation value, and $\sigma$ is the standard erro
 For $\mu > 0$ condition:
 \[
 \begin{aligned}
-	&P(x \ge 0|\mu_{opt}) = &&\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu_{opt})^2}{2\sigma^2}} = P(x \ge 0|\mu_{opt} = x) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-x)^2}{2\sigma^2}}&& = \frac{1}{\sigma\sqrt{2\pi}}\\
-	&P(x < 0|\mu_{opt}) = &&\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu_{opt})^2}{2\sigma^2}} = P(x < 0|\mu_{opt} = 0) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-0)^2}{2\sigma^2}}&& = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{x^2}{2\sigma^2}}\\
-	&R(x \ge 0) =  &&P(x \ge 0|\mu)/P(x \ge 0|\mu_{opt}) =  \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}/\frac{1}{\sigma\sqrt{2\pi}}&& = e^{-\frac{(x-\mu)^2}{2\sigma^2}}\\
-	&R(x < 0) =  &&P(x < 0|\mu)/P(x < 0|\mu_{opt}) =  \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}/\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{x^2}{2\sigma^2}}&& = e^{\frac{2x\mu - \mu^2}{2\sigma^2}}\\
+	&P(x|\mu_{opt}, x \ge 0) = &&\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu_{opt})^2}{2\sigma^2}} = P(x|\mu_{opt} = x, x \ge 0) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-x)^2}{2\sigma^2}}&& = \frac{1}{\sigma\sqrt{2\pi}}\\
+	&P(x|\mu_{opt}, x < 0) = &&\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu_{opt})^2}{2\sigma^2}} = P(x|\mu_{opt} = 0, x < 0) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-0)^2}{2\sigma^2}}&& = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{x^2}{2\sigma^2}}\\
+	&R(x|x \ge 0) =  &&P(x|\mu, x \ge 0)/P(x|\mu_{opt}, x \ge 0) =  \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}/\frac{1}{\sigma\sqrt{2\pi}}&& = e^{-\frac{(x-\mu)^2}{2\sigma^2}}\\
+	&R(x|x < 0) =  &&P(x|\mu, x < 0)/P(x|\mu_{opt}, x < 0) =  \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}/\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{x^2}{2\sigma^2}}&& = e^{\frac{2x\mu - \mu^2}{2\sigma^2}}\\
 \end{aligned}
 \]
 \[
@@ -148,16 +148,16 @@ For $\mu > 0$ condition:
 	\Rightarrow -x_u^2 + 2x_u\mu  = 2x_l\mu
 \]
 \[
-	\Rightarrow x_l = x_u - \frac{x_u^2}{2\mu}
+	\Rightarrow x_l = \frac{2\mu x_u - x_u^2}{2\mu}
 \]
 
 For $\mu < b$ condition:
 \[
 \begin{aligned}
-	&P(x \le b|\mu_{opt}) = &&P(x \le b|\mu_{opt} = x) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-x)^2}{2\sigma^2}}&& = \frac{1}{\sigma\sqrt{2\pi}}\\
-	&P(x > b|\mu_{opt}) = &&P(x > b|\mu_{opt} = b)&& = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-b)^2}{2\sigma^2}}\\
-	&R(x \le b) =  &&P(x \le b|\mu)/P(x \ge 0|\mu_{opt}) =  \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}/\frac{1}{\sigma\sqrt{2\pi}}&& = e^{-\frac{(x-\mu)^2}{2\sigma^2}}\\
-	&R(x > b) =  &&P(x > b|\mu)/P(x < 0|\mu_{opt}) =  \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}/\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-b)^2}{2\sigma^2}}&& = e^{\frac{(2x-(\mu+b))(\mu-b)}{2\sigma^2}}\\
+	&P(x|\mu_{opt}, x \le b) = &&P(x|\mu_{opt} = x, x \le b) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-x)^2}{2\sigma^2}}&& = \frac{1}{\sigma\sqrt{2\pi}}\\
+	&P(x|\mu_{opt}, x > b) = &&P(x|\mu_{opt} = b, x > b)&& = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-b)^2}{2\sigma^2}}\\
+	&R(x|x \le b) =  &&P(x|\mu, x \le b)/P(x|\mu_{opt}, x \le b) =  \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}/\frac{1}{\sigma\sqrt{2\pi}}&& = e^{-\frac{(x-\mu)^2}{2\sigma^2}}\\
+	&R(x|x > b) =  &&P(x|\mu, x > b)/P(x|\mu_{opt}, x > b) =  \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}/\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-b)^2}{2\sigma^2}}&& = e^{\frac{(2x-(\mu+b))(\mu-b)}{2\sigma^2}}\\
 \end{aligned}
 \]
 \[
@@ -167,7 +167,7 @@ For $\mu < b$ condition:
 	\Rightarrow -x_u^2 + 2x_u\mu -b^2 = 2x_l(\mu-b)
 \]
 \[
-	\Rightarrow x_l = \frac{2x_u\mu - x_u^2 - b^2}{2(\mu-b)}
+	\Rightarrow x_l = \frac{2\mu x_u - x_u^2 - b^2}{2(\mu-b)}
 \]
 
  \end{document} 

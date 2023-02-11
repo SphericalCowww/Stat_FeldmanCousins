@@ -34,9 +34,10 @@ def main():
         elif boundType in ["u", "U", "upper", "Upper"]: yRange = [val-5*err, boundEdge]   
     if xRange is None: xRange = [yRange[0]-0.5*(yRange[1]-yRange[0]), yRange[1]+0.5*(yRange[1]-yRange[0])] 
     ySpan, xConfIntUList, xConfIntLList = [], [], []
+
     ySE = err
     yRangeN = int((yRange[1] - yRange[0])/stepSize) + 1
-    for yIter in (tqdm(range(yRangeN)) if verbosity>=1 else range(yRangeN)):
+    for yIter in (tqdm(range(yRangeN)) if (verbosity>=1) else range(yRangeN)):
         yVal = yRange[0] + yIter*stepSize;
         optResult = FCopt(boundType, boundEdge, yVal, ySE, alpha)
         confInt1 = optResult.x
@@ -59,7 +60,7 @@ def main():
     yEst = yEstList[estIdx]
     yConfInt = [ySpan[lowerIdx], ySpan[upperIdx]]
 #plots
-    fig = plt.figure(figsize=(10, 10*abs(yRange[1]-yRange[0])/abs(xRange[1]-xRange[0])))
+    fig = plt.figure(figsize=(8, 8*abs(yRange[1]-yRange[0])/abs(xRange[1]-xRange[0])))
     gs = gridspec.GridSpec(1, 1)
     mpl.rc("xtick", labelsize=16)
     mpl.rc("ytick", labelsize=16)
@@ -73,9 +74,10 @@ def main():
     ax0.plot(xSpan,         yEstList, color="black",    linewidth=2)
     ax0.plot(xConfIntLList, ySpan,    color="darkgrey", linewidth=2)
     ax0.plot(xConfIntUList, ySpan,    color="darkgrey", linewidth=2)
-    title  = "Feldman-Cousins Confidence Interval, "
-    title += "Est=" + scientificStr(val) + ", "
-    title += "SE="  + scientificStr(err)
+    title  = "Feldman-Cousins Confidence Interval\n"
+    title += "est=" + scientificStr(val) + ", "
+    title += "SE="  + scientificStr(err) + ", "
+    title += "$\\alpha$="  + scientificStr(alpha)
     ax0.set_title(title, fontsize=24, y=1.03)
     ax0.set_xlabel("est span", fontsize=18)
     ax0.set_ylabel("FC conf",  fontsize=18)
@@ -92,7 +94,7 @@ def main():
     labelStr += "-" + scientificStr(yEst-yConfInt[0]) + "\n"
     labelStr += "int = [" + scientificStr(yConfInt[0], sigFig=3) + ", "
     labelStr +=             scientificStr(yConfInt[1], sigFig=3) + "]"
-    font = {"family": "serif", "color": "green", "weight": "bold", "size": 18}
+    font = {"family": "serif", "color": "green", "weight": "bold", "size": 14}
     ax0.text(xEst, yRange[1], labelStr, horizontalalignment='left', verticalalignment='top', fontdict=font)
 
     if verbosity >= 1: 
@@ -100,7 +102,6 @@ def main():
                                          "-"+str(yEst-yConfInt[0]))
         print("        conf int =", yConfInt)
         print("        stepSize = "+str(stepSize))
-   
 #save plots
     exepath = os.path.dirname(os.path.abspath(__file__))
     filenameFig = exepath + "/gausFeldmanCousinsGausEvaluate.png"
@@ -162,7 +163,7 @@ def FCconfIntPartner(boundDir, bound, confInt1, par, parErr, alpha):
     elif boundDir in ["l", "L", "lower", "Lower"]:
         if par - errBarRatio*parErr >= bound: confInt2 = par - errBarRatio*parErr
     else: raise ValueError("FCconfIntPartner(): unrecognized boundDir input")
-    return confInt2;
+    return confInt2
 def FCconfIntProbAlpha(boundDir, bound, confInt1, par, parErr, alpha):
     if parErr <= 0: raise ValueError("FCconfIntProbAlpha(): parErr < 0")
     if (boundDir in ["u", "U", "upper", "Upper"]) and (par > bound) or\
@@ -183,14 +184,12 @@ def FCopt(boundDir, bound, par, parErr, alpha):
 ########################### 
 #round a number
 def roundSig(val, sigFig=2):
-    if val == 0:
-        return val;
-    return round(val, sigFig-int(np.floor(np.log10(abs(val))))-1);
+    if val == 0: return val
+    return round(val, sigFig-int(np.floor(np.log10(abs(val))))-1)
 #give scientific figure string output of a number
 def scientificStr(val, sigFig=2):
     valStr = ""
-    if val == 0:
-        valStr = "0.0"
+    if val == 0: valStr = "0.0"
     elif abs(np.floor(np.log10(abs(val)))) < sigFig:
         valStr = str(roundSig(val, sigFig=sigFig))
         if valStr[-2:] == ".0": valStr = valStr[:-2]
