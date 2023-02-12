@@ -21,7 +21,7 @@ def main():
 
     #xRange, yRange = None, None
     xRange, yRange = [-2, 4], [0, 6]
-    stepSize = min(abs(val), err)/50.0
+    stepSize = min(abs(val), err)/200.0
     #alpha = 1.0 - 0.682689492137086 #1-sigma, two-sided confidence level
     #alpha = 1.0 - 0.954499736103642 #2-sigma, two-sided confidence level
     alpha = 0.1
